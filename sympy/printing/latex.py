@@ -135,6 +135,7 @@ class LatexPrinter(Printer):
         "mat_delim": "[",
         "symbol_names": {},
         "ln_notation": False,
+        "parenthesize_base_when_function": False,
     }
 
     def __init__(self, settings=None):
@@ -518,6 +519,8 @@ class LatexPrinter(Printer):
             return self._print_Mul(expr)
         else:
             if expr.base.is_Function:
+                if self._settings["parenthesize_base_when_function"]:
+                    return r"\left(%s\right)^{%s}" % (self._print(expr.base), self._print(expr.exp))
                 return self._print(expr.base, self._print(expr.exp))
             else:
                 if expr.is_commutative and expr.exp == -1:
